@@ -31,7 +31,7 @@ class LengthTest {
 			len.plus(len);
 		});
 		
-		assertEquals(l1, l1.plus(null));
+		assertThrows(IllegalArgumentException.class, () -> l1.plus(null));
 	}
 	
 	@Test
@@ -46,7 +46,7 @@ class LengthTest {
 		res = new Length(10, LengthUnit.M);
 		assertEquals(res, l1.minus(l3));
 		
-		assertEquals(l1, l1.minus(null));
+		assertThrows(IllegalArgumentException.class, () -> l1.minus(null));
 	}
 	
 	@Test
@@ -70,6 +70,9 @@ class LengthTest {
 	{
 		Length l4 = new Length(10, LengthUnit.M);
 		assertTrue(l1.equals(l4));
+		assertFalse(l1.equals(null));
+		assertTrue(l1.equals(l2));
+		assertFalse(l1.equals(l3));
 	}
 
 }

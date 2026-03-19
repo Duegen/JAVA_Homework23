@@ -8,7 +8,10 @@ public class Length {
 	private final LengthUnit unit;
 	
 	public Length(int count, LengthUnit mmAmount) {	
-			this.count = Math.max(0,count); 
+		if(count < 0)
+			throw new IllegalArgumentException("count is less then zero");
+		else	
+			this.count = count; 
 		if(Objects.isNull(mmAmount))
 			throw new IllegalArgumentException("enum is null");
 		else
@@ -30,13 +33,13 @@ public class Length {
 
 	public Length plus(Length other) {
 		if(Objects.isNull(other))
-			return this;
+			throw new IllegalArgumentException("object is null");
 		return new Length (Math.addExact(count, convertToThis(other)), unit);
 	}
 
 	public Length minus(Length other) {
 		if(Objects.isNull(other))
-			return this;
+			throw new IllegalArgumentException("object is null");
 		return new Length (Math.abs(count - convertToThis(other)), unit);
 	}
 
@@ -44,6 +47,11 @@ public class Length {
 		return (int)Math.round(other.count * (other.unit.convert(unit)));
 	}
 	
+	@Override
+	public int hashCode() {
+		return Objects.hash(count, unit);
+	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -53,7 +61,7 @@ public class Length {
 		if (getClass() != obj.getClass())
 			return false;
 		Length other = (Length) obj;
-		return count == other.count && unit == other.unit;
+		return count * unit.getMmAmount() == other.count * other.unit.getMmAmount();
 	}
 
 	public Length convert(LengthUnit convertTo) {
